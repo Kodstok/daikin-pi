@@ -1,9 +1,0 @@
-{
-    "topics": [
-        "livingroom/ac/fan/set", 
-        "livingroom/ac/mode/set", 
-        "livingroom/ac/power/set", 
-        "livingroom/ac/swing/set", 
-        "livingroom/ac/temperature/set"
-    ]
-}

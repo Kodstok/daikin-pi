@@ -57,6 +57,7 @@ class DaikinState:
             economy=False,
             comfort=False,
             powerful=False,
+            timer=TIMER_MODE.SET_NONE,
     ):
 
         self.power = power
@@ -68,7 +69,7 @@ class DaikinState:
         self.economy = economy
         self.comfort = comfort
         self.powerful = powerful
-        self.timer = None  # Not Implemented
+        self.timer = timer  # Not Implemented
 
     @property
     def power(self):
@@ -156,6 +157,12 @@ class DaikinState:
     @property
     def timer(self):
         return self.__timer
+        
+    @timer.setter
+    def timer(self, value):
+      if value not in TIMER_MODE:
+        value = TIMER_MODE.SET_NONE
+      self.__timer = value
 
     def serialize(self):
         return {
@@ -276,9 +283,9 @@ class DaikinMessage:
 
         # Timer Is Setting Unit On/Off
         if self.state.timer is not None:
-            if self.state.timer == TIMER_MODE.OFF:
+            if self.state.timer == TIMER_MODE.SET_OFF:
                 frame[MODE_POWER_TIMERS] = frame[MODE_POWER_TIMERS] | 0x04
-            elif self.state.timer == TIMER_MODE.ON:
+            elif self.state.timer == TIMER_MODE.SET_ON:
                 frame[MODE_POWER_TIMERS] = frame[MODE_POWER_TIMERS] | 0x02
 
         # Power On/Off
@@ -447,7 +454,7 @@ class DaikinController:
         self.autotransmit = autotransmit
         self.autosave = autosave
         self.storage_file = os.path.join(os.path.dirname(__file__),
-                                         '../data/config.json')
+                                         './config.json')
         self.lirc = lirc or DaikinLIRC()
 
     def save(self, state):
